@@ -20,7 +20,7 @@
             <nav>
                 <div class="formWrapper">
                     <div class="buttonWrapper">
-                        <button class="addButton btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button class="addButton btn btn-success" data-bs-toggle="modal" data-bs-target="#newProductModal">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-plus-square-fill" viewBox="0 0 16 16">
                                 <path
@@ -36,23 +36,55 @@
                         </button>
                     </div>
                     <input type="text" name="search" id="searchBar" placeholder="Search product">
+                    <button class="btn btn-secondary" id="searchButton" onclick="filterProducts()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel-fill" viewBox="0 0 16 16">
+                            <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z"/>
+                        </svg>
+                    </button>
+                    <button class="btn btn-secondary d-none" id="refreshButton" onclick="resetFilter()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+                        </svg>  
+                    </button>
                 </div>
             </nav>
 
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            <div class="modal fade modal-lg" id="newProductModal" tabindex="-1" aria-labelledby="newProductModal"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <h1 class="modal-title fs-5" id="modalTitle">New Product Details</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            aggiungi prodotto
+                            <div id="modalFormWrapper">
+                                <form>
+                                    <label for="brand">Brand</label>
+                                    <input class="inputField" type="text" name="brand" id="npBrand" required>
+                                    <label for="name">Name</label>
+                                    <input class="inputField" type="text" name="name" id="npName" required>
+                                    <label for="description">Description</label>
+                                    <textarea class="inputField" type="text" name="description" id="npDescription" rows="5" required></textarea>
+                                    <label for="imageUrl">Image Url</label>
+                                    <input class="inputField" type="text" name="imageUrl" id="npImgUrl" required>
+                                    <label for="price">Price</label>
+                                    <input class="inputField" type="number" name="price" id="npPrice" required>
+                                </form>
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="button" id="modalSaveButton" class="saveButton btn btn-success" onclick="saveNewProduct()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy-fill" viewBox="0 0 16 16">
+                                    <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0H3v5.5A1.5 1.5 0 0 0 4.5 7h7A1.5 1.5 0 0 0 13 5.5V0h.086a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5H14v-5.5A1.5 1.5 0 0 0 12.5 9h-9A1.5 1.5 0 0 0 2 10.5V16h-.5A1.5 1.5 0 0 1 0 14.5z"/>
+                                    <path d="M3 16h10v-5.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5zm9-16H4v5.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5zM9 1h2v4H9z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -72,42 +104,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="tdCheck">
-                            <input type="checkbox" name="checkSingle" class="checkSingle">
-                        </td>
-                        <td class="tdImg">
-                            <div class="imgWrapper">
-                                <img src="https://picsum.photos/400/300" alt="" class="img-fluid">
-                            </div>
-                        </td>
-                        <td class="tdBrand">Papple Pimple Paripampù</td>
-                        <td class="tdName">MacPuck Sbroc lebrok lerooooy jenkins</td>
-                        <td class="tdDescription">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum
-                            corrupti pariatur ad</td>
-                        <td class="tdPrice">9999,99€</td>
-                        <td>
-                            <button class="btn btn-success">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                    <path
-                                        d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                    <path fill-rule="evenodd"
-                                        d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                                </svg>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="btn btn-danger">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                    <path
-                                        d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                                </svg>
-                            </button>
-                        </td>
-                    </tr>
-
                 </tbody>
             </table>
         </div>

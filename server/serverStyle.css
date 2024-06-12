@@ -63,7 +63,32 @@ nav{
 #searchBar{
     flex-grow:2;
     padding-left: 1em;
-    
+}
+
+#searchButton, #refreshButton{
+    border-radius: 0;
+}
+
+#modalFormWrapper form{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#modalFormWrapper input{
+    width: 100%;
+}
+
+#modalFormWrapper input:invalid{
+    border: 1px solid red;
+}
+
+#modalFormWrapper textarea:invalid{
+    border: 1px solid red;
+}
+
+#modalFormWrapper form:has(:invalid) .saveButton{
+    background-color: grey !important;
 }
 
 thead{
@@ -72,6 +97,10 @@ thead{
 
 thead .tdCheck{
     padding-top: 1em;
+}
+
+.tdCheck{
+    text-align: center;
 }
 
 .tdCheck input[type=checkbox]{
@@ -85,6 +114,11 @@ tbody td{
 
 .tdImg{
     width: 10%;
+}
+
+.tdPrice{
+    text-wrap: nowrap;
+    text-align: end;
 }
 
 .imgWrapper {
