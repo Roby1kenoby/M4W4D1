@@ -30,9 +30,9 @@ let f_addProduct = async function(product){
             const data = await resp.text()  
             alert(`Warning, product not saved for the following reason:\n${data}`)
         }
-        // else{
-        //     alert(`Product correctly inserted.`)
-        // }
+        else{
+            alert(`Product correctly inserted.`)
+        }
     } catch (error) {
         console.log('sono in error: ', error)
     }
@@ -87,7 +87,7 @@ let f_updateProduct = async function(id, bod){
             },
             body: JSON.stringify(bod)
         })
-        // console.log(resp)
+        alert('Product updated!')
     } catch (error) {
         console.log(error)
     }
