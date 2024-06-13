@@ -7,7 +7,7 @@ header{
     display: flex;
     justify-content: center;
 }
-header img{
+header a{
     padding-top: 1em;
     width: 20%;
 }

@@ -10,7 +10,9 @@ let modalSaveButton = document.getElementById('modalSaveButton')
 let searchInput = document.getElementById('searchBar')
 let filterButton = document.getElementById('searchButton')
 let refreshButton = document.getElementById('refreshButton')
+let masterCheckbox = document.getElementById('checkAll');
 let products = []
+let productPropertyes = ['name', 'brand', 'price', 'description']
 
 // (the f_ prefix means ther's a direct fetch inside)
 // function to add products to the backend 
@@ -28,9 +30,9 @@ let f_addProduct = async function(product){
             const data = await resp.text()  
             alert(`Warning, product not saved for the following reason:\n${data}`)
         }
-        else{
-            alert(`Product correctly inserted. Status resp: ${resp.status}`)
-        }
+        // else{
+        //     alert(`Product correctly inserted.`)
+        // }
     } catch (error) {
         console.log('sono in error: ', error)
     }
@@ -50,6 +52,8 @@ let f_getProducts = async function(id=''){
         }
         else{
             let data = await resp.json()    
+            // console.log(data)
+            products = data
             // console.log(data)
             return data
         }
@@ -83,7 +87,7 @@ let f_updateProduct = async function(id, bod){
             },
             body: JSON.stringify(bod)
         })
-        console.log(resp)
+        // console.log(resp)
     } catch (error) {
         console.log(error)
     }
@@ -115,7 +119,7 @@ let createTableRows = function(product){
     row.innerHTML = 
     `
     <td class="tdCheck">
-        <input type="checkbox" name="checkSingle" class="checkSingle">
+        <input type="checkbox" name="checkSingle" class="checkSingle" data-id="${product._id}">
     </td>
     <td class="tdImg">
         <div class="imgWrapper">
@@ -211,12 +215,36 @@ let callUpdateFetch = async function(id){
 // function to filter products based on the search input
 let filterProducts = async function (){
     toggleFilterButtons()
-    //FARE FUNZIONE FILTRO
+    filterDom()
+}
+
+// function to remove products not filtered from the dom
+let filterDom = function(){
+    let filteredProducts = []
+    // for each product
+    products.forEach(p => {
+        // cycle through keys
+        Object.keys(p).forEach(key => {
+            // if the key is one that i need to evaluate
+            if(productPropertyes.includes(key)){
+                // if the searched value is inside the key value
+                if(p[key].toString().toLowerCase().includes(searchInput.value.toLowerCase())){
+                    // if the product isn't already in the array i push it
+                    !filteredProducts.includes(p) ? filteredProducts.push(p) : null
+                } 
+            }
+        })
+    })
+    clearTable()
+    printTable(filteredProducts)
 }
 
 // function to reset the filter on products
 let resetFilter = async function(){
+    searchInput.value = ''
     toggleFilterButtons()
+    clearTable()
+    refreshScreen()
 }
 
 // function to toggle filter and refresh button visibility
@@ -241,12 +269,110 @@ modalForEvent.addEventListener('hidden.bs.modal', event => {
     clearForm()
 })
 
-// event listener for the search bar
-// searchInput.addEventListener('input',function() {
-//     filterProducts(searchInput.value)
-// })
+// event listener for main checkbox
+masterCheckbox.addEventListener('change', function() {
+    let checkboxes = document.getElementsByClassName('checkSingle')
+    if (this.checked){
+        for (c of checkboxes) {
+            c.checked = true
+        }
+    }
+    else{
+        for (c of checkboxes) {
+            c.checked = false
+        }
+    }
+});
+
+// function to delete all the products selected
+let deleteSelectedProducts = async function(){
+    let checkboxes = document.getElementsByClassName('checkSingle')
+    for(c of checkboxes){
+        // for every checked checkbox i get it's id from the dataset and delete the product
+        c.checked ? await f_deleteProduct(c.dataset.id) : null
+    }
+    // then i clear the table and get the remaining products
+    clearTable()
+    await refreshScreen()
+}
+
 
 // fastload
 onload = async (e) => {
+    //initializeBackEndProducts(baseProducts)
     refreshScreen()
 }
+
+
+// array to fast load products in the backend
+let baseProducts = [
+    {
+        "name": "Fluffy ball with puppy eyes",
+        "description": "What else ther's to say?",
+        "brand": "Dogghibus",
+        "imageUrl": "https://picsum.photos/id/237/200/200",
+        "price": 99999,
+    },
+    {
+        "name": "Picsum4k",
+        "description": "For photos on steroids!",
+        "brand": "PhotoRoid",
+        "imageUrl": "https://picsum.photos/id/250/200/200",
+        "price": 150,
+    },
+    {
+        "name": "The Wall",
+        "description": "Lots of bricks",
+        "brand": "Beatles",
+        "imageUrl": "https://picsum.photos/id/210/200/200",
+        "price": 50,
+    },
+    {
+        "name": "A field of weath",
+        "description": "Alooooo shaloooooom",
+        "brand": "Gladiator",
+        "imageUrl": "https://picsum.photos/id/33/200/200",
+        "price": 200,
+    },
+    {
+        "brand": "Motha Natureh",
+        "name": "Rocks and Stones",
+        "description": "Paradise fot dwarven",
+        "imageUrl": "https://picsum.photos/id/15/200/200",
+        "price": 500,
+    },
+    {
+        "brand": "LonelyWorld",
+        "name": "Solitary Bench",
+        "description": "For lonely people (bread for ducks not included)",
+        "imageUrl": "https://picsum.photos/id/87/200/200",
+        "price": 15,
+    },
+    {
+        "brand": "Brains",
+        "name": "Land-Boat",
+        "description": "A boat to go on rails. Pretty useless.",
+        "imageUrl": "https://picsum.photos/id/69/200/200",
+        "price": 0,
+    },
+    {
+        "brand": "Dogghibus",
+        "name": "Herbivore Dogs",
+        "description": "Not sure this is ethical...",
+        "imageUrl": "https://picsum.photos/id/169/200/200",
+        "price": 5000.99,
+    },
+    {
+        "brand": "Gandalf",
+        "name": "The Shire",
+        "description": "New Zeland more affected by dwarfism place is for sale! Go get your diggyhole!",
+        "imageUrl": "https://picsum.photos/id/251/200/200",
+        "price": 9000,
+    }
+]
+// function to add a set of basic products
+let initializeBackEndProducts = function(productArray){
+    productArray.forEach(p => {
+        f_addProduct(p)
+    })
+} 
