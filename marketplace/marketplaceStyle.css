@@ -19,6 +19,7 @@ main{
     align-items: center;
     padding-top: 1em;
 }
+
 nav{
     width: 100%;
     -webkit-box-shadow: 0px 10px 25px 2px #303030;
@@ -29,6 +30,18 @@ nav{
 
 nav img{
     width: 50px;
+}
+
+.nav-item{
+    position: relative;
+}
+
+.badge{
+    position: absolute;
+    background-color: #D6ACAE;
+    top: -20%;
+    right: -10%;
+    border-radius: 50%;
 }
 
 #navbarNav{
@@ -87,3 +100,56 @@ nav img{
 .price{
     text-wrap: nowrap;
 }
+
+@media screen and (min-width: 1501px){
+	#sideMenu{
+        width: 30%;
+    }
+}
+
+@media screen and (min-width: 501px) and (max-width: 1500px){
+	#sideMenu{
+        width: 40%;
+    }
+}
+
+@media screen and (max-width: 500px){
+	#sideMenu{
+        width: 100%;
+    }
+}
+
+#sideMenu img{
+    width: 180px;
+    margin-bottom: 1em;
+}
+
+#cartList hr{
+    margin-bottom: 1em;
+    margin-right: 10%;
+}
+
+.productList button{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 1em;
+}
+
+.productInfos{
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.productInfos p:nth-child(2){
+    text-wrap: nowrap;
+}
+
+#totalCart button{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 1em;
+}
+

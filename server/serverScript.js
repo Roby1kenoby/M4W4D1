@@ -95,15 +95,31 @@ let f_updateProduct = async function(id, bod){
 
 // function to read data from modal and send the new product to the backend
 let saveNewProduct = async function(){
-    let tempProduct = {}
-    modalInputFields.forEach(i => {
-        tempProduct[i.name] = i.value
-    })
-    await f_addProduct(tempProduct)
-    modal.toggle()
-    clearForm()
-    clearTable()
-    refreshScreen()
+
+    try {
+        let breakException = 'missing values'
+        let tempProduct = {}
+        modalInputFields.forEach(i => {
+            if(i.value){
+                tempProduct[i.name] = i.value
+            }
+            else{
+                // throwing break at the first missing value
+                throw breakException
+            }
+        })
+        await f_addProduct(tempProduct)
+        modal.toggle()
+        clearForm()
+        clearTable()
+        refreshScreen()
+    } catch (error) {
+        if(error === 'missing values'){
+            alert("Warning! Missing values! Insert all the mandatory fields!")
+        }    
+    }
+
+    
 }
 
 // function to clear the new product modal form
@@ -175,9 +191,12 @@ let refreshScreen = async function(dataArray = []){
 
 // function called by the row to delete a product
 let deleteProduct = async function(id){
-    await f_deleteProduct(id)
-    clearTable()
-    refreshScreen()
+    var result = confirm("Do you really want to delete this product?");
+    if (result) {
+        await f_deleteProduct(id)
+        clearTable()
+        refreshScreen()
+    }
 }
 
 // function to edit a product
@@ -286,14 +305,17 @@ masterCheckbox.addEventListener('change', function() {
 
 // function to delete all the products selected
 let deleteSelectedProducts = async function(){
-    let checkboxes = document.getElementsByClassName('checkSingle')
-    for(c of checkboxes){
+    var result = confirm("Do you really want to delete these products?");
+    if (result) {
+        let checkboxes = document.getElementsByClassName('checkSingle')
+        for(c of checkboxes){
         // for every checked checkbox i get it's id from the dataset and delete the product
-        c.checked ? await f_deleteProduct(c.dataset.id) : null
+            c.checked ? await f_deleteProduct(c.dataset.id) : null
+        }
+        // then i clear the table and get the remaining products
+        clearTable()
+        await refreshScreen()
     }
-    // then i clear the table and get the remaining products
-    clearTable()
-    await refreshScreen()
 }
 
 

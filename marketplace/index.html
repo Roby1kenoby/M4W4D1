@@ -15,7 +15,7 @@
     <main>
         <nav id="navigation" class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideMenu">
                     <img src="../assets/smallLogo.png" alt="">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -31,16 +31,16 @@
                             <a class="nav-link" href="#">Other Products</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Pricing</a>
+                            <a class="nav-link" href="../server/serverIndex.html">Server</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Profile</a>
                         </li>
                         <li class="nav-item">
                             <form class="d-flex" role="search">
-                                <input class="form-control me-2" type="search" placeholder="Search products"
+                                <input id="searchBar" class="form-control me-2" type="search" placeholder="Search products"
                                     aria-label="Search">
-                                <button class="btn btn-outline-success" type="submit">Search</button>
+                                <!-- <button class="btn btn-outline-success" type="submit">Search</button> -->
                             </form>
                         </li>
                         <li class="nav-item">
@@ -50,24 +50,42 @@
                                     <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-.623l-1.844 6.456a.75.75 0 0 1-.722.544H3.69a.75.75 0 0 1-.722-.544L1.123 8H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM2.163 8l1.714 6h8.246l1.714-6z"/>
                                 </svg>
                             </button>
+                            <span class="badge d-none">0</span>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
         <div id="cardsContainer" class="container row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 ">
+            <!-- cards container-->
         </div>
         
-
-            <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="sideMenu" aria-labelledby="offcanvasWithBothOptionsLabel">
-                <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
+        <!-- side panel -->
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="sideMenu" aria-labelledby="offcanvasWithBothOptionsLabel">
+            <div class="offcanvas-header d-flex flex-column">
+                <img src="../assets/robs-marketplace-high-resolution-logo-transparent.png" alt="">
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Your Order</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                <p>Try scrolling the rest of the page to see this option in action.</p>
+            </div>
+            <div class="offcanvas-body">
+                <div id="cartList">
+                    <ul>
+                        <!-- cartList -->
+                    </ul>
+                    <div id="totalCart" class="w-100 d-flex align-items-center">
+                        <div class="productInfos d-flex just">
+                            <p class="fw-bold">Total</p>
+                            <p class="fw-bold" id="cartTotal"></p>
+                        </div>
+                        <button class="btn btn-success" onclick="buy()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-heart-fill" viewBox="0 0 16 16">
+                                <path d="M11.5 4v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m0 6.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
+        </div>
 
         
     </main>
