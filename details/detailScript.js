@@ -87,7 +87,7 @@ let updateCartValues = function(){
     cartBadge.innerHTML = cart.length
     // showing badge if ther's at least one product
     cart.length > 0 ? cartBadge.classList.remove('d-none') : cartBadge.classList.add('d-none') 
-    cartTotal.innerHTML = tot.toLocaleString('it-IT')
+    cartTotal.innerHTML = tot.toLocaleString('it-IT') + ' €'
 }
 
 // function to clear the cartRows
