@@ -1,14 +1,20 @@
 let urlServer = 'https://striveschool-api.herokuapp.com/api/product/'
 let tokenAuth = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3M2M5NTdmNmI0YjAwMTU0MjhmYmIiLCJpYXQiOjE3MTgwNDE3NDksImV4cCI6MTcxOTI1MTM0OX0.cWXhY0IiDf_t2ETumzY24fHKfUkwU7xaKt_sXZeu7Bw"
-let cardContainer = document.getElementById('cardsContainer')
 let nav = document.getElementById('navigation')
 let cartList = document.querySelector('#cartList ul')
 let cartBadge = document.getElementsByClassName('badge')[0]
 let cartTotal = document.getElementById('cartTotal')
-let searchBar = document.getElementById('searchBar')
 let productPropertyes = ['name', 'brand', 'price', 'description']
-let products = []
+let productName = document.getElementById('productName')
+let productBrand = document.getElementById('productBrand')
+let productDescription = document.getElementById('productDescription')
+let productPrice = document.getElementById('productPrice')
+let productImage = document.getElementById('productImage')
+let btnWrapper = document.getElementsByClassName('bottomButtonWrapper')[0]
+let btnAdd = document.getElementById('btnAdd')
+let btnRemove = document.getElementById('btnRemove')
 let cart = []
+let productId = ''
 
 // function to get a specific product via it's id, or all the products if ther's no id
 let f_getProducts = async function(id=''){
@@ -32,45 +38,6 @@ let f_getProducts = async function(id=''){
     } catch (error) {
         console.log(error)
     }
-}
-
-// script to create a card
-let createCard = function(product){
-    let cardWrapper = document.createElement('div')
-    cardWrapper.classList.add('cardWrapper')
-    cardWrapper.innerHTML = 
-    `
-    <div class="card">
-        <div class="imgWrapper">
-            <img src="${product.imageUrl}" class="card-img-top" alt="${product.name}">
-            <div class="bottomButtonWrapper" data-id="${product._id}">
-                <button class="btn btn-primary" onclick="addToCart('${product._id}')">Add</button>
-                <button class="btn btn-danger d-none" onclick="removeFromCart('${product._id}')">Remove</button>
-            </div>
-        </div>
-        <div class="card-body d-flex flex-column justify-content-between">
-            <div>
-                <div class="d-flex justify-content-between">
-                    <a href="../details/detailIndex.html?id=${product._id}"><h5 class="name card-title">${product.name}</h5></a>
-                    <p class="price">${product.price.toLocaleString('it-IT')} €</p>
-                </div>
-                <p class="brand">${product.brand}</p>
-                <hr>
-                <p class="description card-text">${product.description}</p>
-            </div>
-            <hr>
-            
-        </div>
-    </div>
-    `
-    cardContainer.appendChild(cardWrapper)
-}
-
-// function to print cards on screen
-let printCards = function(dataArray){
-    dataArray.forEach(p => {
-        createCard(p)
-    })
 }
 
 // function to add rows to cart list
@@ -161,50 +128,24 @@ let printRows = function (cartArray){
     updateCartValues()
 }
 
-// function to clean cards from dom
-let clearCardsContainer = function(){
-    cardContainer.innerHTML = ''
-}
-
 // function to update buttons on cards based on the cart
-let updateCardsButtons = function(){
+let updateButtons = function(){
     cart.forEach(p => {
         toggleBuyButton(p._id)
     })
 }
 
-// function to search for products
-let searchProducts = function(value){
-    let filteredProducts = []
-    // for each product
-    products.forEach(p => {
-        // cycle through keys
-        Object.keys(p).forEach(key => {
-            // if the key is one that i need to evaluate
-            if(productPropertyes.includes(key)){
-                // if the searched value is inside the key value
-                if(p[key].toString().toLowerCase().includes(value.toLowerCase())){
-                    // if the product isn't already in the array i push it
-                    !filteredProducts.includes(p) ? filteredProducts.push(p) : null
-                } 
-            }
-        })
-    })
-    clearCardsContainer()
-    printCards(filteredProducts)
-    updateCardsButtons()
-}
-
 // function to buy things and empty the cart
 let buy = function(){
-    alert(`Thank you for purchasing our experiences!\nYour total is: ${cartTotal.innerHTML}€\nSee you soon!`)
-    clearCardsContainer()
-    printCards(products)
-    cart = []
-    clearCartRows()
-    updateCartValues()
-    // clearing local storage
-    localStorage.clear()
+    if (cart.length > 0){
+        alert(`Thank you for purchasing our experiences!\nYour total is: ${cartTotal.innerHTML}€\nSee you soon!`)
+        updateButtons()
+        cart = []
+        clearCartRows()
+        updateCartValues()
+        // clearing local storage
+        localStorage.clear()
+    }
 }
 
 // function to add cart to local storage
@@ -225,31 +166,34 @@ let updateFromCart = function(){
     if(cart.length>0){
         clearCartRows()
         printRows(cart)
-        updateCardsButtons()
     }
 }
 
-// function to add sitcky class to navbar based on scroll height
-function stickynavbar() {
-    if (window.scrollY >= nav.offsetHeight) {    
-        nav.classList.add('sticky');
-    } else {
-        nav.classList.remove('sticky');    
-    }
+// function to read queryString parameters
+let getQsParameters = function(){
+    const params = new URLSearchParams(window.location.search)
+    productId = params.get("id")
 }
 
-// scroll event listener
-window.addEventListener('scroll', stickynavbar);
-
-searchBar.addEventListener('input',function() {
-    searchProducts(searchBar.value)
-})
-
+// function to update the product details
+let updateProductPage = async function(){
+    let productDetails = await f_getProducts(productId)
+    productName.innerHTML = productDetails.name
+    productBrand.innerHTML = productDetails.brand
+    productDescription.innerHTML = productDetails.description
+    productPrice.innerHTML = `${productDetails.price.toLocaleString('it-IT')}€ `
+    productImage.src = productDetails.imageUrl
+    btnWrapper.dataset.id = productDetails._id
+    btnAdd.setAttribute('onclick','addToCart("'+productDetails._id+'")') 
+    btnRemove.setAttribute('onclick','removeFromCart("'+productDetails._id+'")')
+}
 
 // fastload
 onload = async (e) => {
-    products = await f_getProducts()
-    printCards(products)
+    getQsParameters()
     getCart()
     updateFromCart()
+    // need to wait for the update before eventually toggle buttons
+    await updateProductPage()
+    updateButtons()
 }

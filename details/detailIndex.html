@@ -1,0 +1,111 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rob's Marketplace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="detailStyle.css">
+</head>
+
+<body>
+    <header>
+        <a href="../marketplace/index.html"><img src="../assets/robs-marketplace-high-resolution-logo-transparent.png"
+                alt="" class="img-fluid"></a>
+    </header>
+    <main>
+        <nav id="navigation" class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <!-- <a class="navbar-brand" class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideMenu">
+                    <img src="../assets/smallLogo.png" alt="">
+                </a> -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <form action="../marketplace/index.html">
+                                <button id="backButton" class="btn btn-success" type="submit" value="../marketplace/index.html">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <button id="cartButton" class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideMenu" aria-controls="sideMenu">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket2" viewBox="0 0 16 16">
+                                    <path d="M4 10a1 1 0 0 1 2 0v2a1 1 0 0 1-2 0zm3 0a1 1 0 0 1 2 0v2a1 1 0 0 1-2 0zm3 0a1 1 0 1 1 2 0v2a1 1 0 0 1-2 0z"/>
+                                    <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-.623l-1.844 6.456a.75.75 0 0 1-.722.544H3.69a.75.75 0 0 1-.722-.544L1.123 8H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM2.163 8l1.714 6h8.246l1.714-6z"/>
+                                </svg>
+                            </button>
+                            <span class="badge d-none">0</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div id="mainContainer" class="row">
+            <!-- details container-->
+            <div class="col-6" id="imgContainer">
+                <img class="img-fluid" id="productImage" src="" alt="">
+            </div>
+            <div class="col-6 d-flex flex-column" id="detailsContainer">
+                <div class="row d-flex flex-column">
+                    <div>
+                        <h2 id="productName"></h2>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h3 id="productBrand"></h3>
+                        <h3 id="productPrice"></h3>
+                    </div>
+                </div>
+                <p id="productDescription"></p>
+                <hr>
+                <p class="fst-italic text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, aperiam. Recusandae consectetur earum perferendis doloribus ipsum modi laudantium sunt ullam corrupti? Veritatis dolore quo adipisci, nisi delectus minus libero deserunt?</p>
+                <hr>
+                <div class="bottomButtonWrapper">
+                    <button id="btnAdd" class="btn btn-primary">Add</button>
+                    <button id="btnRemove" class="btn btn-danger d-none">Remove</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- side panel -->
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="sideMenu" aria-labelledby="offcanvasWithBothOptionsLabel">
+            <div class="offcanvas-header d-flex flex-column">
+                <img src="../assets/robs-marketplace-high-resolution-logo-transparent.png" alt="">
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Your Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div id="cartList">
+                    <ul>
+                        <!-- cartList -->
+                    </ul>
+                    <div id="totalCart" class="w-100 d-flex align-items-center">
+                        <div class="productInfos d-flex just">
+                            <p class="fw-bold">Total</p>
+                            <p class="fw-bold" id="cartTotal"></p>
+                        </div>
+                        <button class="btn btn-success" onclick="buy()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-heart-fill" viewBox="0 0 16 16">
+                                <path d="M11.5 4v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m0 6.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="detailScript.js"></script>
+</body>
+<!-- <footer class="bg-secondary">
+    footer
+</footer> -->
